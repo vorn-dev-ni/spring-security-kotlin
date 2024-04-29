@@ -22,44 +22,27 @@ import java.security.SignatureException
 @RestController
 @Validated
 @RequestMapping("/api/user")
-class UserController(var userService: UserService,var authenticationManager: AuthenticationManager,
-                     var jwtGenerator: JWTGenerator) {
+class UserController(
+    var userService: UserService, var authenticationManager: AuthenticationManager,
+    var jwtGenerator: JWTGenerator
+) {
 
-    @ExceptionHandler(SignatureException::class)
-    fun jwtException(ex: SignatureException) : ResponseEntity<Any>{
 
-        return ResponseEntity(ex.message,HttpStatus.UNAUTHORIZED)
-
-    }
-    @ExceptionHandler(MalformedJwtException::class)
-    fun malwwareForm(ex: MalformedJwtException) : ResponseEntity<Any>{
-
-        print("Unautorize")
-        return ResponseEntity(ex.message?:"JWT is invalid",HttpStatus.UNAUTHORIZED)
-
-    }
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
-    fun unauthorizeException(ex: AuthenticationCredentialsNotFoundException) : ResponseEntity<Any>{
-
-        print("Unautorize")
-        return ResponseEntity(ex.message,HttpStatus.UNAUTHORIZED)
-
-    }
     @PostMapping("/register")
     fun register(@Valid @RequestBody userRequest: UserRequest): ResponseEntity<Any> {
         userService.registerUser(userRequest);
 
-        return ResponseEntity("User has been created",HttpStatus.OK);
+        return ResponseEntity("User has been created", HttpStatus.OK);
     }
 
-   @GetMapping
-   fun user(): ResponseEntity<Any>  {
-       return ResponseEntity("WWlecome",HttpStatus.OK);
+    @GetMapping
+    fun user(): ResponseEntity<Any> {
+        return ResponseEntity("WWlecome", HttpStatus.OK);
 
-   }
+    }
+
     @PostMapping("/login")
-    fun login(@RequestBody loginDto:LoginRequest ): ResponseEntity<Any>
-    {
+    fun login(@RequestBody loginDto: LoginRequest): ResponseEntity<Any> {
         val authentication: Authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 loginDto.username,
@@ -68,7 +51,7 @@ class UserController(var userService: UserService,var authenticationManager: Aut
         )
         val token = jwtGenerator.generateToken(authentication)
         SecurityContextHolder.getContext().authentication = authentication
-        return ResponseEntity.ok(TokenResponse(token,"Bearer"))
+        return ResponseEntity.ok(TokenResponse(token, "Bearer"))
     }
 
 }

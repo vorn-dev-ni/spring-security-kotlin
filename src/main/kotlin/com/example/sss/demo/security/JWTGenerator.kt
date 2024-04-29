@@ -1,8 +1,12 @@
 package com.example.sss.demo.security
 
+import com.example.sss.demo.exception.JWTException
 import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
@@ -43,7 +47,17 @@ class JWTGenerator {
             return claims.subject;
         } catch (ex: SignatureException) {
 
-            throw SignatureException(ex.message)
+            throw JWTException(ex.message.toString())
+        } catch (ex: SignatureException) {
+            throw JWTException(ex.message.toString())
+        } catch (ex: MalformedJwtException) {
+            throw JWTException(ex.message.toString())
+        } catch (ex: ExpiredJwtException) {
+            throw JWTException(ex.message.toString())
+        } catch (ex: UnsupportedJwtException) {
+            throw JWTException(ex.message.toString())
+        } catch (ex: IllegalArgumentException) {
+            throw JWTException(ex.message.toString())
         }
 
 

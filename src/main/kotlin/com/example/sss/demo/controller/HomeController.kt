@@ -1,15 +1,12 @@
 package com.example.sss.demo.controller
 
+import com.example.sss.demo.exception.JWTException
 import jakarta.annotation.security.RolesAllowed
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 class HomeController {
     @Value("\${baeldung.presentation}")
     final lateinit var key:String
+
 
 
     @GetMapping
