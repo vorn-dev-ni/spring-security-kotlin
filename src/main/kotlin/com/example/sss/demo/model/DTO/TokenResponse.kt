@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty
 class TokenResponse(
 
     var accessToken:String,
+    var refreshToken:String,
     var tokenType:String,
 
 ) {

@@ -1,21 +1,17 @@
 package com.example.sss.demo.security
 
 import com.example.sss.demo.exception.JWTException
-import io.jsonwebtoken.Claims
+import com.example.sss.demo.model.RefreshToken
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.UnsupportedJwtException
-import io.jsonwebtoken.security.Keys
 import io.jsonwebtoken.security.SignatureException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
-import java.security.Key
 import java.util.*
 
 @Component
@@ -35,6 +31,18 @@ class JWTGenerator {
 
         return token
 
+    }
+
+    fun generateAccessToken(username:String):String {
+        val expireDate: Date = Date(Date().time + JTWUtils().expiredDate)
+
+        val token = Jwts.builder().subject(
+                username
+        ).issuedAt(Date())
+            .expiration(expireDate).signWith(SignatureAlgorithm.HS256, secret)
+            .compact()
+
+        return token
     }
 
     fun getUserDetail(token: String): String {
